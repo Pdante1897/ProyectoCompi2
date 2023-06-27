@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  background-color:rgb(180, 36, 36);
+  font-size: large;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+h1{
+  text-align:center;
+  font-family:"Segoe UI";
+  color: white;
+  font-weight: 700;
+}
+
+.contenedor-botones{
+  height:5%;
+  text-align:center;
+}
+button{
+  height:40px;
+  width: 100px;
+  border-radius: 10px;
+  margin: 10px;
+  margin-bottom: 25px;
+  color:black;
+  font-size: medium;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  background-color: rgb(151, 6, 6);
+}
+.izquierda{
+  height: 50vh;
+  width:50%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+  text-align: center;
+}
+.derecha{
+  width: 50%;
+  height: 50vh;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 50px;
+  text-align: center;
+}
+.contenedor{
+  display:flex;
+  border: 20px;
+}
+.tablaSimbolos{
+  display:none; 
+  background-color: rgb(127, 172, 255);
+}
+.tablaErrores{
+  display:none; 
+  background-color: rgb(127, 172, 255);
+}
+.imgAst{
+  display:none; 
+  background-color: rgb(127, 172, 255);
+}
+
+h2{
+  text-align:center;
+  font-family:"Segoe UI";
+  color: black;
+  font-weight: 700;
+}
+
