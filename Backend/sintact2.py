@@ -217,13 +217,13 @@ def p_funciones(t):
                 | FUNCTION ID PARIZQ parametrosfunc PARDER LLAIZQ instrucciones LLADER
                 | FUNCTION ID PARIZQ parametrosfunc PARDER DPUNTOS tipo LLAIZQ instrucciones LLADER'''
     if len(t) == 8:
-        t[0] = Metodo(t[2],[], t[6], t.lineno(1), get_Columna(input, t.slice[1]))
+        t[0] = Metodo(t[2],[], t[6], 'void', t.lineno(1), get_Columna(input, t.slice[1]))
     elif len(t) == 10:
-        t[0] = Metodo(t[2], [], t[8], t.lineno(1), get_Columna(input, t.slice[1]))
+        t[0] = Metodo(t[2], [], t[8] ,t[6], t.lineno(1), get_Columna(input, t.slice[1]))
     elif len(t) == 9:
-        t[0] = Metodo(t[2], t[4], t[7], t.lineno(1), get_Columna(input, t.slice[1]))
+        t[0] = Metodo(t[2], t[4], t[7], 'void', t.lineno(1), get_Columna(input, t.slice[1]))
     else:
-        t[0] = Metodo(t[2], t[4], t[9], t.lineno(1), get_Columna(input, t.slice[1]))
+        t[0] = Metodo(t[2], t[4], t[9], t[7], t.lineno(1), get_Columna(input, t.slice[1]))
 
 def p_funciones3_(t):
     'funciones : FUNCTION ID PARIZQ  PARDER LLAIZQ  LLADER'
@@ -337,7 +337,7 @@ def p_arrays_Declaracion(t):
         t[0]= Arrays(t[2],t.lineno(2), get_Columna(input, t.slice[2]))
     elif len(t) == 7:
         print("array")
-        t[0]= Arrays(t[2], DeclareArray(t[5],t.lineno(2), get_Columna(input, t.slice[2])), t.lineno(2), get_Columna(input, t.slice[2]))
+        t[0]= DeclareArray(t[2], t.lineno(1), get_Columna(input, t.slice[1]), t[5])
     elif len(t) == 4:
         if t[0] == '[':
             t[0]= Arrays(None,t[2],t.lineno(2), get_Columna(input, t.slice[2]))
@@ -640,6 +640,8 @@ def traducir(entrada):
         consola = generador.getCode()
         #print(consola)
     
-    return consola
+    datos = {"consola": consola, "tabla": ast.getTsglobal().getTablaG(), "errores": ast.getErrores()+errores}
+
+    return  datos
 
 #correr(entradaP)

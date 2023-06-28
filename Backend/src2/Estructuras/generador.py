@@ -21,6 +21,7 @@ class Generador:
         # Lista de Nativas
         self.printString = False
         self.compareString = False
+        self.printArray = False
 
         # Listas de imports
         self.imports = []
@@ -282,6 +283,43 @@ class Generador:
         self.addIf(tempC, '-1', '==', returnLbl)
         self.addIdent()
         self.addPrintChar(tempC)
+        self.addIdent()
+        self.addExp(tempH, tempH, '1', '+')
+        self.addIdent()
+        self.addGoto(compareLbl)
+        self.putLabel(returnLbl)
+        self.addEndFunc()
+        self.inNatives = False
+
+    def fPrintArray(self):
+        self.setImport('fmt')
+        if(self.printString):
+            return
+        self.printString = True
+        self.inNatives = True
+
+        self.addBeginFunc('printArray')
+        # Label para salir de la funcion
+        returnLbl = self.newLabel()
+        # Label para la comparacion para buscar fin de cadena
+        compareLbl = self.newLabel()
+        # Temporal puntero a Stack
+        tempP = self.addTemp()
+        # Temporal puntero a Heap
+        tempH = self.addTemp()
+        self.addExp(tempP, 'P', '1', '+')
+        self.getStack(tempH, tempP)
+        # Temporal para comparar
+        tempC = self.addTemp()
+        self.putLabel(compareLbl)
+        self.addIdent()
+        self.getHeap(tempC, tempH)
+        self.addIdent()
+        self.addIf(tempC, '-1', '==', returnLbl)
+        self.addIdent()
+        self.addPrint('f' , tempC)
+        self.addPrint('c' , 44)
+        self.addPrint('c' , 32)
         self.addIdent()
         self.addExp(tempH, tempH, '1', '+')
         self.addIdent()

@@ -50,11 +50,17 @@ def compilar():
     data = request.get_json()
     entrada = str(data["codigo"])
     print(entrada)
-    consola = traducir(entrada)
+    Ejecucion = traducir(entrada)
+    consola = Ejecucion.get('consola')
+    tabla = Ejecucion.get('tabla')
+    errores = Ejecucion.get('errores')    
     saltos = consola.count('\n')
     print(consola)
     data = {}
     data["consola"] = consola
+    data["tablaSimbolos"] = tablas2(tabla)
+    data["tablaErrores"] = horrores(errores)
+    data["dotAst"] = arbolito(entrada)
     json_data = json.dumps(data, indent=saltos)
     return json_data
 
@@ -71,6 +77,18 @@ def tablas(tabla):
         tablita.append(simbolo)
     print(tablita)
     return tablita
+
+def tablas2(tabla):
+    tablita = []
+    for x in tabla:
+        tipo = tabla[x].getTipo()
+        if tipo is ObjectType.STRUCT: tipo= "struct"
+        
+        simbolo = {'id': str(x),  'tipo': tipo, 'entorno': 'global'} 
+        tablita.append(simbolo)
+    print(tablita)
+    return tablita
+
 #tablaErrores
 def horrores(errores):
     listerrores = []

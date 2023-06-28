@@ -10,11 +10,11 @@ from typing import List
 
 class Metodo(Abstract):
 
-    def __init__(self, ide, parametros, instrucciones, fila, columna):
+    def __init__(self, ide, parametros, instrucciones, tipo, fila, columna):
         self.ide = ide
         self.parametros = parametros
         self.instrucciones = instrucciones
-        self.tipo = 'void'
+        self.tipo = tipo
         self.recTemp = True
         super().__init__(fila, columna)
     
@@ -144,6 +144,7 @@ class Llamada(Abstract):
             generador.addComment(f'Fin de la llamada a la funcion {self.ide}')
             generador.addSpace()
             if funcion.getTipo() != 'boolean':
+                print("aqui esta el retorno")
                 return Return2(temp, funcion.getTipo(), True)
             else:
                 generador.addComment('Recuperacion de booleano')

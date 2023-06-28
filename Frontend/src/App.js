@@ -215,7 +215,7 @@ export default function App() {
           <Editor
             height='50vh'
             theme='vs-dark'
-            defaultLanguage='typescript'
+            defaultLanguage='markdown'
             value={myValue}
             onChange={handleEditorChange}
 

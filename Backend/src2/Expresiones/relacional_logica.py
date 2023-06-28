@@ -34,7 +34,7 @@ class Relacional_Logica(Abstract):
                     print("Semantico", "No se puede utilizar la expresion booleana en: ", right, self.fila, self.columna)
 
                     return right
-                if (left.getTipo() == 'number') and (right.getTipo() == 'number'):
+                if (left.getTipo() == 'number') and (right.getTipo() == 'number') or (left.getTipoAux() == 'acceso') or (right.getTipoAux() == 'acceso'):
                     self.checkLabels()
                     generador.addIf(left.getValue(), right.getValue(), self.getOperador(), self.getTrueLbl())
                     generador.addGoto(self.getFalseLbl())

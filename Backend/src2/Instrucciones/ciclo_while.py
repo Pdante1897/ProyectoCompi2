@@ -36,7 +36,7 @@ class While(Abstract):
                 entorno.returnLbl = tabla.returnLbl
                 result = instruccion.interpretar(arbol, entorno)
                 if isinstance(result, Error):
-                    arbol.setErrores(result)
+                    return result
                 if isinstance(result, Break):
                     if tabla.breakLbl != '':
                         generador.addGoto(tabla.breakLbl)

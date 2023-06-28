@@ -1,3 +1,4 @@
+from ..Instrucciones.Funciones import Llamada
 from ..Expresiones.Primitivos import Primitivos
 from ..Instrucciones.AccesoS import AccesoS
 from ..Abstract.Abstracto import Abstract
@@ -14,26 +15,23 @@ class Aritmetica(Abstract):
         self.tipo = None
         super().__init__(fila, columna)
     
-    def interpretar(self, arbol, tabla):
+    def interpretar(self, tree, table):
         genAux = Generador()
         generador = genAux.getInstance()
         temporal = ''
         operador = ''
-                    
-        if self.op_izq != 0: 
-            izq = self.op_izq.interpretar(arbol, tabla)
-            der = self.op_der.interpretar(arbol, tabla)
+        der = ''
+        izq = self.op_izq.interpretar(tree, table)
+        if isinstance(izq, Error): return izq
+        if isinstance(self.op_der, Llamada):
+            self.op_der.guardarTemps(generador, table, [izq.getValue()])
+            der = self.op_der.interpretar(tree, table)
+            if isinstance(der, Error): return der
+            self.op_der.recuperarTemps(generador, table, [izq.getValue()])
         else:
-            izq = 0
-            der = self.op_der.interpretar(arbol, tabla)
-        if self.op == '-' and self.op_izq == 0:
-            print("nice")
-        
-        if type(izq) is int or type(izq) is float: izq = Return(str(izq), "number", False)
-        if type(der) is int or type(izq) is float: der = Return(str(der), "number", False)
-        
-        
-        
+            der = self.op_der.interpretar(tree, table)
+            if isinstance(der, Error): return der
+
         if self.op == '+':
             operador = '+'
             temporal = generador.addTemp()
@@ -60,21 +58,6 @@ class Aritmetica(Abstract):
             generador.addExp(temporal, izq.getValue(), der.getValue(), operador)
             self.tipo = 'number'
             return Return(temporal, self.tipo, True)
-        elif self.op == '^':
-            temporal = generador.addTemp()
-            generador.addMathpow(temporal, izq.getValue(), der.getValue())
-            self.tipo = 'number'            
-            return Return(temporal, self.tipo, True)
-        elif self.op == '%':
-            if der == 0:
-                return 'Error: Division entre 0'
-            operador = '%'
-            temporal = generador.addTemp()
-            generador.addMathpow(temporal, izq.getValue(), der.getValue())
-            self.tipo = 'number'            
-            return Return(temporal, self.tipo, True)
-        
+
     def getTipo(self):
         return self.tipo
-
-

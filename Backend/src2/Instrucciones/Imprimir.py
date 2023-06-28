@@ -12,42 +12,62 @@ class Imprimir(Abstract):
     
     def interpretar(self, arbol, tabla):
         genAux = Generador()
-        generator = genAux.getInstance()
+        gen = genAux.getInstance()
         value = self.expresion.interpretar(arbol, tabla)
+        print("valor imp ", value.value)
+        print("valor tipo aux ", value.getTipoAux())
 
         if isinstance(value, Error): return value
 
         if value.getTipo() == 'number':
-            generator.addPrint('f', value.getValue())
+            gen.addPrint('f', value.getValue())
         elif value.getTipo() == 'string' or value.getTipo() == 'any':
-            generator.fPrintString()
+            gen.fPrintString()
 
-            paramTemp = generator.addTemp()
+            paramTemp = gen.addTemp()
             
-            generator.addExp(paramTemp, 'P', tabla.size, '+')
-            generator.addExp(paramTemp, paramTemp, '1', '+')
-            generator.setStack(paramTemp, value.value)
+            gen.addExp(paramTemp, 'P', tabla.size, '+')
+            gen.addExp(paramTemp, paramTemp, '1', '+')
+            gen.setStack(paramTemp, value.value)
             
-            generator.newEnv(tabla.size)
-            generator.callFun('printString')
+            gen.newEnv(tabla.size)
+            gen.callFun('printString')
 
-            temp = generator.addTemp()
-            generator.getStack(temp, 'P')
-            generator.retEnv(tabla.size)
+            temp = gen.addTemp()
+            gen.getStack(temp, 'P')
+            gen.retEnv(tabla.size)
+        elif value.getTipo() == 'array':
+            if value.getTipoAux() == 'acceso':
+                gen.addPrint('f', value.getValue())
+            else :
+                gen.fPrintArray()
+                paramTemp = gen.addTemp()
+                gen.addExp(paramTemp, 'P', tabla.size, '+')
+                gen.addExp(paramTemp, paramTemp, '1', '+')
+                gen.setStack(paramTemp, value.value)
+            
+                gen.newEnv(tabla.size)
+                gen.addPrint('c' ,91)
+                gen.callFun('printArray')
+                gen.addPrint('c' , 93)
+
+                temp = gen.addTemp()
+                gen.getStack(temp, 'P')
+                gen.retEnv(tabla.size)
         elif value.getTipo() == 'boolean':
-            tempLbl = generator.newLabel()
+            tempLbl = gen.newLabel()
 
-            generator.putLabel(value.getTrueLbl())
-            generator.printTrue()
+            gen.putLabel(value.getTrueLbl())
+            gen.printTrue()
 
-            generator.addGoto(tempLbl)
+            gen.addGoto(tempLbl)
 
-            generator.putLabel(value.getFalseLbl())
-            generator.printFalse()
+            gen.putLabel(value.getFalseLbl())
+            gen.printFalse()
 
-            generator.putLabel(tempLbl)
+            gen.putLabel(tempLbl)
 
-        generator.addPrint('c', 10)
+        gen.addPrint('c', 10)
     
 class Imprimir2(Abstract):
 
@@ -58,7 +78,7 @@ class Imprimir2(Abstract):
     def interpretar(self, arbol, tabla):
         valor = ""
         genAux = Generador()
-        generator = genAux.getInstance()
+        gen = genAux.getInstance()
         for expresiones in self.listaexp:
        
             value = expresiones.interpretar(arbol, tabla)
@@ -66,36 +86,54 @@ class Imprimir2(Abstract):
             if isinstance(value, Error): return value
 
             if value.getTipo() == 'number':
-                generator.addPrint('f', value.getValue())
+                gen.addPrint('f', value.getValue())
             elif value.getTipo() == 'string' or value.getTipo() == 'any':
-                generator.fPrintString()
+                gen.fPrintString()
 
-                paramTemp = generator.addTemp()
+                paramTemp = gen.addTemp()
             
-                generator.addExp(paramTemp, 'P', tabla.size, '+')
-                generator.addExp(paramTemp, paramTemp, '1', '+')
-                generator.setStack(paramTemp, value.value)
+                gen.addExp(paramTemp, 'P', tabla.size, '+')
+                gen.addExp(paramTemp, paramTemp, '1', '+')
+                gen.setStack(paramTemp, value.value)
             
-                generator.newEnv(tabla.size)
-                generator.callFun('printString')
+                gen.newEnv(tabla.size)
+                gen.callFun('printString')
 
-                temp = generator.addTemp()
-                generator.getStack(temp, 'P')
-                generator.retEnv(tabla.size)
+                temp = gen.addTemp()
+                gen.getStack(temp, 'P')
+                gen.retEnv(tabla.size)
+            elif value.getTipo() == 'array':
+                if value.getTipoAux() == 'acceso':
+                    gen.addPrint('f', value.getValue())
+                else :
+                    gen.fPrintArray()
+                    paramTemp = gen.addTemp()
+                    gen.addExp(paramTemp, 'P', tabla.size, '+')
+                    gen.addExp(paramTemp, paramTemp, '1', '+')
+                    gen.setStack(paramTemp, value.value)
+            
+                    gen.newEnv(tabla.size)
+                    gen.addPrint('c' ,91)
+                    gen.callFun('printArray')
+                    gen.addPrint('c' , 93)
+
+                    temp = gen.addTemp()
+                    gen.getStack(temp, 'P')
+                    gen.retEnv(tabla.size)
             elif value.getTipo() == 'boolean':
-                tempLbl = generator.newLabel()
+                tempLbl = gen.newLabel()
 
-                generator.putLabel(value.getTrueLbl())
-                generator.printTrue()
+                gen.putLabel(value.getTrueLbl())
+                gen.printTrue()
 
-                generator.addGoto(tempLbl)
+                gen.addGoto(tempLbl)
 
-                generator.putLabel(value.getFalseLbl())
-                generator.printFalse()
+                gen.putLabel(value.getFalseLbl())
+                gen.printFalse()
 
-                generator.putLabel(tempLbl)
+                gen.putLabel(tempLbl)
 
-            generator.addPrint('c', 32)
+            gen.addPrint('c', 32)
             
                    
-        generator.addPrint('c', 10)
+        gen.addPrint('c', 10)
