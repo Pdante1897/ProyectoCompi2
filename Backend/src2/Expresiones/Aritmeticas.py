@@ -58,6 +58,19 @@ class Aritmetica(Abstract):
             generador.addExp(temporal, izq.getValue(), der.getValue(), operador)
             self.tipo = 'number'
             return Return(temporal, self.tipo, True)
+        elif self.op == '^':
+            temporal = generador.addTemp()
+            generador.addMathpow(temporal, izq.getValue(), der.getValue())
+            self.tipo = 'number'            
+            return Return(temporal, self.tipo, True)
+        elif self.op == '%':
+            if der == 0:
+                return 'Error: Division entre 0'
+            operador = '%'
+            temporal = generador.addTemp()
+            generador.addMathpow(temporal, izq.getValue(), der.getValue())
+            self.tipo = 'number'            
+            return Return(temporal, self.tipo, True)
 
     def getTipo(self):
         return self.tipo
